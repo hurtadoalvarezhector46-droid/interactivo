@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuidemos el Medio Ambiente</title>
+  <link rel="stylesheet" href="confetti.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #a8e063, #56ab2f);
+      margin: 0;
+      padding: 0;
+    }
+
+    #header {
+      background-color: #7fe67c;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #124e1b;
+      margin: 10px;
+    }
+
+    #seccion {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 10px;
+    }
+
+    .barra {
+      flex: 3;
+      padding: 10px;
+      margin: 5px;
+      background: #c5f0b9;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #imagen-interactiva {
+      position: relative;
+      width: 300px;
+      height: 400px;
+      background-image: url('/ecosistema\ dibujo.png');
+      background-size: cover;
+      background-position: center;
+      border: 3px solid #2e7d32;
+      border-radius: 10px;
+    }
+
+    .hotspot {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(0, 100, 0, 0.6);
+      color: white;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    #hotspot1 { top: 50px; left: 120px; }
+    #hotspot2 { top: 170px; left: 70px; }
+    #hotspot3 { top: 280px; left: 180px; }
+
+    .contenido {
+      flex: 2;
+      background: #f3f9e9;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 5px;
+      text-align: center;
+    }
+
+    .contenido h2 {
+      color: #2e7d32;
+    }
+
+    .contenido img {
+      width: 180px;
+      height: 180px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    #resultado {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .texto-rojo {
+      font-size: 40px;
+      font-weight: bold;
+      color: green;
+    }
+
+    #footer {
+      background-color: #e7f8dc;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-radius: 10px;
+      margin: 10px;
+      padding: 10px;
+    }
+
+    #footer img {
+      width: 100px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    #footer img:hover {
+      transform: scale(1.1);
+    }
+
+    /* Fiesta */
+    #fiesta {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    #box-win {
+      text-align: center;
+    }
+
+    #boton-reintentar {
+      width: 150px;
+      height: 50px;
+      background-color: #2e7d32;
+      color: white;
+      border-radius: 10px;
+      text-align: center;
+      line-height: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 20px auto;
+      display: none;
+    }
+
+    #boton-reintentar:hover {
+      background-color: #1b5e20;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header">
+    <h1>🌿 Cuidemos el Medio Ambiente 🌿</h1>
+    <p>Explora los puntos interactivos y luego realiza el test ecológico</p>
+  </div>
+
+  <div id="seccion">
+    <div class="barra">
+      <div id="imagen-interactiva">
+        <div id="hotspot1" class="hotspot">1</div>
+        <div id="hotspot2" class="hotspot">2</div>
+        <div id="hotspot3" class="hotspot">3</div>
+      </div>
+    </div>
+
+    <div class="contenido">
+      <h2 id="titulo-info">Instrucciones</h2>
+      <p id="texto-info">
+        Haz clic en los puntos del ecosistema para aprender sobre el reciclaje, el agua y el aire limpio.
+        Luego, realiza la prueba para medir tus conocimientos.
+      </p>
+      <img id="imagen-info" src="/cursor icono.webp" alt="Imagen informativa">
+
+      <div id="resultado">
+        <h2>Tu resultado:</h2>
+        <span id="calif" class="texto-rojo">0/0</span>
+        <img id="imagen-resultado" src="images/ping.gif" width="200px" alt="Resultado">
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer">
+    <div id="instrucciones"><img src="images/instrucciones.png" alt="Ver Instrucciones"></div>
+    <div id="prueba"><img src="images/test.png" alt="Iniciar Prueba"></div>
+  </div>
+
+  <!-- Fiesta -->
+  <div id="fiesta" class="invisible">
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+  </div>
+
+  <div id="boton-reintentar">Reintentar</div>
+
+  <script>
+    let puntaje = 0;
+
+    // Hotspots informativos
+    document.getElementById('hotspot1').onclick = function() {
+      document.getElementById('titulo-info').textContent = 'Reciclaje ♻️';
+      document.getElementById('texto-info').textContent = 'El reciclaje ayuda a reducir la contaminación y aprovechar los materiales para darles nueva vida.';
+      document.getElementById('imagen-info').setAttribute('src', 'images/reciclaje.png');
+    };
+
+    document.getElementById('hotspot2').onclick = function() {
+      document.getElementById('titulo-info').textContent = 'Cuidado del Agua 💧';
+      document.getElementById('texto-info').textContent = 'El agua es vital. Cierra la llave mientras te cepillas los dientes y evita su desperdicio.';
+      document.getElementById('imagen-info').setAttribute('src', 'images/agua.png');
+    };
+
+    document.getElementById('hotspot3').onclick = function() {
+      document.getElementById('titulo-info').textContent = 'Aire Limpio 🌬️';
+      document.getElementById('texto-info').textContent = 'Plantar árboles y usar transporte ecológico ayuda a mantener el aire limpio.';
+      document.getElementById('imagen-info').setAttribute('src', 'images/aire.png');
+    };
+
+    // Instrucciones
+    document.getElementById('instrucciones').onclick = function() {
+      document.getElementById('titulo-info').textContent = 'Instrucciones';
+      document.getElementById('texto-info').textContent = 'Haz clic en los puntos del ecosistema para aprender sobre reciclaje, agua y aire. Luego realiza el test ecológico.';
+      document.getElementById('imagen-info').setAttribute('src', 'images/hotspot-cursor.png');
+    };
+
+    // Prueba ecológica
+    document.getElementById('prueba').onclick = function() {
+      alert("🌎 Bienvenido al test ecológico");
+      alert("Responde correctamente todas las preguntas sobre el medio ambiente.");
+
+      let r1 = prompt("1️⃣ ¿Qué color de contenedor se usa para el vidrio?");
+      if (r1 && r1.trim().toLowerCase() === "verde") {
+        alert("✅ Correcto: el contenedor verde es para el vidrio.");
+        puntaje++;
+      } else {
+        alert("❌ Incorrecto. El contenedor verde es el correcto.");
+      }
+
+      let r2 = prompt("2️⃣ ¿Qué debemos hacer con las botellas de plástico usadas?");
+      if (r2 && (r2.toLowerCase().includes("reciclar") || r2.toLowerCase().includes("reutilizar"))) {
+        alert("✅ Muy bien, las botellas deben reciclarse o reutilizarse.");
+        puntaje++;
+      } else {
+        alert("❌ Incorrecto. Se deben reciclar o reutilizar las botellas.");
+      }
+
+      let r3 = prompt("3️⃣ ¿Qué gas se produce al quemar basura?");
+      if (r3 && r3.toLowerCase().includes("co2")) {
+        alert("✅ Correcto: se libera dióxido de carbono (CO2).");
+        puntaje++;
+      } else {
+        alert("❌ Incorrecto. Al quemar basura se genera CO2.");
+      }
+
+      // Mostrar resultados
+      if (puntaje === 3) {
+        alert("🎉 ¡Excelente! Has respondido correctamente todas las preguntas.");
+        document.getElementById("fiesta").classList.replace("invisible", "visible");
+        document.getElementById("resultado").style.display = "flex";
+        document.getElementById("calif").textContent = puntaje + "/3";
+      } else {
+        alert("Has respondido " + puntaje + " de 3 preguntas correctamente. ¡Sigue intentando!");
+        document.getElementById("resultado").style.display = "flex";
+        document.getElementById("calif").textContent = puntaje + "/3";
+        document.getElementById("boton-reintentar").style.display = "block";
+      }
+    };
+
+    // Reintentar
+    document.getElementById("boton-reintentar").onclick = function() {
+      window.location.reload();
+    };
+  </script>
+</body>
+</html>
